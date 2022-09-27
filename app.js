@@ -15,7 +15,8 @@ async function main() {
   let execAsync = promisify(exec);
   let { stdout: globalPath } = await execAsync("npm root -g");
   console.log(globalPath);
-  let filePathCopy = globalPath + "/ade-cli/commands/add.js";
+  var tmp = globalPath.toString().replace(/(\r\n|\n|\r)/gm, "");
+  let filePathCopy = tmp + "/ade-cli/commands/add.js";
   // console.log(await getConnectionParams('hello'));
   // return
   const projectType = await getProjectType();
