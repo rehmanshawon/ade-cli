@@ -19,7 +19,7 @@ async function createNestProject(projectName) {
     clearInterval(myInt);
     process.chdir(projectName);
     console.log(" Done", stdout);
-    return true;
+    return process.cwd();
   } else {
     clearInterval(myInt);
     console.log(stderr);

@@ -1,10 +1,10 @@
 {
-  "name": "new-ade-cli",
-  "version": "2.1.0",
+  "name": "ade-cli",
+  "version": "2.4.0",
   "description": "",
   "main": "index.js",
   "bin": {
-    "todos": "./index.js"
+    "ade": "./index.js"
   },
   "publishConfig": {
     "access": "public"

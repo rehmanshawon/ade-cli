@@ -1,13 +1,23 @@
-Add-Type -AssemblyName System.Windows.Forms
- [System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")|Out-Null
+Function Select-FolderDialog
+{
+    param([string]$Description="Select Folder",[string]$RootFolder="Desktop")
 
-    $foldername = New-Object System.Windows.Forms.FolderBrowserDialog
-    $foldername.Description = "Select a folder"
-    $foldername.rootfolder = "MyComputer"
-    $foldername.SelectedPath = $initialDirectory
+ [System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms") |
+     Out-Null     
 
-    if($foldername.ShowDialog() -eq "OK")
-    {
-        $folder += $foldername.SelectedPath
+   $objForm = New-Object System.Windows.Forms.FolderBrowserDialog
+        $objForm.Rootfolder = $RootFolder
+        $objForm.Description = $Description
+        $Show = $objForm.ShowDialog()
+        If ($Show -eq "OK")
+        {
+            Return $objForm.SelectedPath
+        }
+        Else
+        {
+            Write-Error "Operation cancelled by user."
+        }
     }
-    return $folder
+
+$folder = Select-FolderDialog # the variable contains user folder selection
+write-host $folder
