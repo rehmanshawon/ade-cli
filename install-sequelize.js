@@ -24,12 +24,14 @@ async function installSequelize() {
     }, 2000);
     //console.log(process.cwd());
     const { error, stdout, stderr } = await exec(
-      "npm install --save sequelize",
+      "npm install --save sequelize sequelize-typescript dotenv",
       {
         shell: "powershell.exe",
       }
     );
-    if (!error) {
+    if (!error) {      
+      const { err}=await exec("npm install --save-dev @types/sequelize",{shell:"powershell.exe"});
+      if(!err)
       console.log(" Done", stdout);
       clearInterval(myInt);
       return true;

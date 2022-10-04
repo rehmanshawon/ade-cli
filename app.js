@@ -8,6 +8,7 @@ const installSequelize = require("./install-sequelize");
 const createProjectFolder = require("./get-folder");
 const createNestProject = require("./create-nest-project");
 const getConnectionParams = require("./get-connection-params");
+const copyEntireDirectory = require('./copy-directory');
 
 let projectPath = "";
 
@@ -30,7 +31,8 @@ async function main() {
             const status = await installSequelize();
             if (status) {
               if (await installDatabase()) {
-                console.log(await getConnectionParams(projectName));
+                const database = await getConnectionParams(projectName);
+                const envString=`DB_HOST=`
                 fs.copyFile(filePathCopy, projectPath + "/add.js", (err) => {
                   if (err) throw err;
 
