@@ -1,8 +1,10 @@
 const util = require("node:util");
 const exec = util.promisify(require("node:child_process").exec);
+const ora = require("ora");
+
 
 async function nestInstalled() {
-  process.stdout.write("Checking if nest.js installed");
+  //process.stdout.write("Checking if nest.js installed");  
   try {
     const { stdout } = await exec("nest info", {
       shell: "powershell.exe",
@@ -15,19 +17,22 @@ async function nestInstalled() {
   }
 }
 async function installNest() {
+  let throbber = ora('Checking if nest.js installed').start();
+  throbber.color='blue';
+  throbber.spinner='arrow3';
   const status = await nestInstalled();
-  if (!status) {
-    process.stdout.write("Installing nest.js");
-    var myInt = setInterval(function () {
-      process.stdout.write(" .");
-    }, 2000);
-    const { error, stdout, stderr } = await exec("npm install -g @nestjs/cli", {
+  throbber.stop();
+    if (!status) {    
+    throbber = ora('Installing nest.js').start();
+    const { error, stdout } = await exec("npm install -g @nestjs/cli", {
       shell: "powershell.exe",
       detached: true,
     });
     if (!error) {
-      clearInterval(myInt);
-      console.log(" Done", stdout, stderr);
+      throbber.stopAndPersist({       
+        text: 'Installation done.',
+      });
+      console.log(stdout);
       return true;
     } else {
       return false;

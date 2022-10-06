@@ -9,7 +9,7 @@ async function getConnectionParams(projectName) {
     name:`${projectName}`,
     host:'localhost',
     port:3306,
-    dialect:'mysql2'
+    dialect:'mysql'
   }
   let input=await inquirer.prompt({      
       name: "username",
@@ -37,13 +37,13 @@ async function getConnectionParams(projectName) {
           database.host=input.host?input.host:database.host;
     input=await inquirer.prompt({      
             name: "port",
-            message: "Database Port (default is 5432)?",
+            message: "Database Port (default is 3306)?",
             choices: ["backend development", "frontend development"],
           });
           database.port=input.port?input.port:database.port;
     input=await inquirer.prompt({      
             name: "dialect",
-            message: "Database Dialect (default is postgres)?",
+            message: "Database Dialect (default is mysql)?",
             choices: ["backend development", "frontend development"],
           });
           database.dialect=input.dialect?input.dialect:database.dialect;

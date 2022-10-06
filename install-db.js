@@ -34,7 +34,7 @@ async function installMySQL() {
   var myInt = setInterval(function () {
     process.stdout.write(" .");
   }, 2000);
-  const { error, stdout } = await exec("npm install --save mysql2", {
+  const { error, stdout } = await exec("npm install mysql2 -g", {
     shell: "powershell.exe",
   });
   if (!error) {

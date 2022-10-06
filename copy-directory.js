@@ -65,7 +65,9 @@ const copyEntireDirectory = (src, dest, errorCallback) => {
 
   // call the main copier function
   // with a src and destination folder
-  copyEntireDirectory('./src','./dest/deeper-dest/deepest-dest',showError);
+  //copyEntireDirectory('./src','./dest/deeper-dest/deepest-dest',showError);
   // check that the destination will be created if it doesn't exist.
 
   // Thank you.
+
+  module.exports=copyEntireDirectory;
