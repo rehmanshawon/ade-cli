@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
-const util = require("node:util");
-const exec = util.promisify(require("node:child_process").exec);
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
+
 
 async function installDatabase() {
   const getDatabase = await inquirer.prompt([
@@ -11,7 +12,7 @@ async function installDatabase() {
       choices: ["Postgres", "MySQL", "SQLite", "MSSQL", "Oracle"],
     },
   ]);
-  console.log(getDatabase);
+  console.log(getDatabase);  
   if (getDatabase.database === "MySQL") {
     return await installMySQL();
   }
@@ -27,6 +28,7 @@ async function installDatabase() {
   if (getDatabase.database === "Oracle") {
     return await installOracle();
   }
+
 }
 
 async function installMySQL() {
@@ -34,7 +36,7 @@ async function installMySQL() {
   var myInt = setInterval(function () {
     process.stdout.write(" .");
   }, 2000);
-  const { error, stdout } = await exec("npm install mysql2 -g", {
+  const { error, stdout } = await exec("npm install mysql2 -g --loglevel verbose", {
     shell: "powershell.exe",
   });
   if (!error) {
@@ -51,7 +53,7 @@ async function installPG() {
   var myInt = setInterval(function () {
     process.stdout.write(" .");
   }, 2000);
-  const { error, stdout } = await exec("npm install --save pg pg-hstore", {
+  const { error, stdout } = await exec("npm install --save pg pg-hstore --loglevel verbose", {
     shell: "powershell.exe",
   });
   if (!error) {
@@ -68,7 +70,7 @@ async function installSQLite() {
   var myInt = setInterval(function () {
     process.stdout.write(" .");
   }, 2000);
-  const { error, stdout } = await exec("npm install --save sqlite3", {
+  const { error, stdout } = await exec("npm install --save sqlite3 --loglevel verbose", {
     shell: "powershell.exe",
   });
   if (!error) {
@@ -85,7 +87,7 @@ async function installMSSQL() {
   var myInt = setInterval(function () {
     process.stdout.write(" .");
   }, 2000);
-  const { error, stdout } = await exec("npm install --save tedious", {
+  const { error, stdout } = await exec("npm install --save tedious --loglevel verbose", {
     shell: "powershell.exe",
   });
   if (!error) {
@@ -102,7 +104,7 @@ async function installOracle() {
   var myInt = setInterval(function () {
     process.stdout.write(" .");
   }, 2000);
-  const { error, stdout } = await exec("npm install --save oracledb", {
+  const { error, stdout } = await exec("npm install --save oracledb --loglevel verbose", {
     shell: "powershell.exe",
   });
   if (!error) {

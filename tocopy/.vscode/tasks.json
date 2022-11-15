@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run npm start on startup",
+      "type": "shell",
+      "command": "npm run start:dev",
+      "windows": {
+        "command": "npm run start:dev"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",        
+      },
+      "isBackground": true,
+      "runOptions": { "runOn": "folderOpen" }
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+export const tableFormat={    
+    tableName:"sys_users",
+    fieldList:[
+        {
+            field:"userId",
+            type:"number",
+            unique:true,  
+            optional:false,
+            default:"inc-1-1",                                   
+            key:"primary",
+            referece:null,            
+        },
+        {
+            field:"userName",
+            type:"string",
+            unique:false,
+            optional:false,
+            default:null,
+            key:null,
+            referece:null,            
+        },
+        {
+            field:"email",
+            type:"string",
+            unique:true,
+            optional:false,
+            default:null,
+            key:null,
+            referece:null,             
+        },
+        {
+            field:"password",
+            type:"string",
+            unique:false,
+            optional:false,
+            default:null,
+            key:null,
+            referece:null,             
+        },
+        {
+            field:"roleId",
+            type:"number",
+            unique:false,
+            optional:false,
+            default:null,
+            key:"@ForeignKey",
+            referece:{table:"sys_roles", field:"role_id", relation:"@BelongsTo"},             
+        }
+    
+    ]
+
+}

@@ -1,6 +1,6 @@
 var process = require("process");
-const util = require("node:util");
-const exec = util.promisify(require("node:child_process").exec);
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
 //const spawn = require("await-spawn");
 
 let psScript = `Function Select-FolderDialog

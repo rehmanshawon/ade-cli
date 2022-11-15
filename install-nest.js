@@ -1,5 +1,5 @@
-const util = require("node:util");
-const exec = util.promisify(require("node:child_process").exec);
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
 const ora = require("ora");
 
 
@@ -24,7 +24,7 @@ async function installNest() {
   throbber.stop();
     if (!status) {    
     throbber = ora('Installing nest.js').start();
-    const { error, stdout } = await exec("npm install -g @nestjs/cli", {
+    const { error, stdout } = await exec("npm install -g @nestjs/cli --loglevel verbose", {
       shell: "powershell.exe",
       detached: true,
     });

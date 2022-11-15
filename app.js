@@ -12,9 +12,16 @@ const getConnectionParams = require("./get-connection-params");
 const copyEntireDirectory = require('./copy-directory');
 const createDatabase=require('./create-db');
 const installCriticalPackages=require('./install-package');
+const renamePackage=require('./rename-package');
+const ora = require("ora");
+const openVSCodeInCurDir = require("./open-vscode");
+const getADEDirectory = require("./get-ade-dir");
 
 let projectPath = "";
-
+let adePath=process.cwd();
+//let adePath= await getADEDirectory();
+let toCopyPath=join(adePath,'tocopy');
+console.log(toCopyPath);
 const showError=(error)=>{
   console.log(error);
 }
@@ -23,35 +30,45 @@ async function main() {
   let execAsync = promisify(exec);
   let { stdout: globalPath } = await execAsync("npm root -g");
   //console.log(globalPath);
-  var tmp = globalPath.toString().replace(/(\r\n|\n|\r)/gm, "");  
-  let filePathCopy2=join(process.cwd(), 'src', 'database');
-  let filePathCopy1=join(process.cwd(),'.sequelizerc');
+  var tmp = globalPath.toString().replace(/(\r\n|\n|\r)/gm, "");
+  adePath=join(tmp,'ade-cli');
+  toCopyPath=join(adePath,'tocopy');
+  console.log(toCopyPath);
+  let filePathCopy2=join(process.cwd(), 'tocopy', 'src/database');
+  let filePathCopy1=join(adePath,'.sequelizerc');
   //console.log(filePathCopy1);    
   const projectType = await getProjectType();
   if (projectType.framework === "backend development") {
     {
       const projectName = await createProjectFolder();
+      projectPath=process.cwd();
       if (projectName) {
         if ((await installNest()) === true) {
-          projectPath = await createNestProject(projectName);
-          if (projectPath !== "") {
+          renamePackage(toCopyPath+'/package.json',projectName);
+          //copyEntireDirectory(toCopyPath,projectPath,showError);
+          //fs.copyFileSync(filePathCopy1, projectPath+'/.sequelizerc');
+         // projectPath = await createNestProject(projectName);
+         // if (projectPath !== "") {
             const status = await installSequelize();
             if (status) {
+
               if (await installDatabase()) {
                 const database = await getConnectionParams(projectName);
                 const envString=`DB_HOST=${database.host}\nDB_PORT=${database.port}\nDB_USER=${database.username}\nDB_PASS=${database.password}\nDB_DIALECT=${database.dialect}\nDB_NAME_DEVELOPMENT=${database.name}\nDB_NAME_TEST=${database.name}\nDB_NAME_PRODUCTION=${database.name}\nJWTKEY=random_secret_key\nTOKEN_EXPIRATION=48h\nBEARER=Bearer\nAPP_PORT=3000`;
-                fs.writeFileSync('./.env',envString,(err)=>{
+                fs.writeFileSync(toCopyPath+'/.env',envString,(err)=>{
                   console.log("write file error");
                 });
                 //const dest=projectPath+'/src/database';
-                copyEntireDirectory(filePathCopy2,projectPath+'/src/database',showError);
+                copyEntireDirectory(toCopyPath,projectPath,showError);
                 fs.copyFileSync(filePathCopy1, projectPath+'/.sequelizerc');
                 if(await installCriticalPackages())
-                  await createDatabase();        
-              }
+                  await createDatabase();
+                  await openVSCodeInCurDir();
+
+                }
             }
           }
-        }
+        //}
       }
     }
   }
@@ -66,5 +83,5 @@ async function getProjectType() {
   });
 }
 
-main();
-//module.exports = main;
+//main();
+module.exports = main;
