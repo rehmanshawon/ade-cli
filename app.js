@@ -16,6 +16,8 @@ const renamePackage=require('./rename-package');
 const ora = require("ora");
 const openVSCodeInCurDir = require("./open-vscode");
 const getADEDirectory = require("./get-ade-dir");
+const copyFolderRecursiveSync = require("./copy-entire-directory");
+const copyFolderSync = require("./copy-entire-directory");
 
 let projectPath = "";
 let adePath=process.cwd();
@@ -59,7 +61,9 @@ async function main() {
                   console.log("write file error");
                 });
                 //const dest=projectPath+'/src/database';
-                copyEntireDirectory(toCopyPath,projectPath,showError);
+                //copyEntireDirectory(toCopyPath,projectPath,showError);
+                //copyFolderRecursiveSync(toCopyPath,projectPath);
+                copyFolderSync(toCopyPath,projectPath);
                 fs.copyFileSync(filePathCopy1, projectPath+'/.sequelizerc');
                 if(await installCriticalPackages())
                   await createDatabase();

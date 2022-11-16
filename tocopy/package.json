@@ -1,5 +1,5 @@
 {
-  "name": "riad",
+  "name": "ade-cli-back",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -93,6 +93,5 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  },
-  "scripts,foo": "shawon"
+  }
 }
