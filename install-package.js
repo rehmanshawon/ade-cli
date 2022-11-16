@@ -8,7 +8,7 @@ async function installCriticalPackages() {
   throbber.spinner='arrow3';
    // process.stdout.write("Installing necessary packages . . .");
     try {
-       const { stdout } = await exec("npm install --loglevel verbose", {
+       const { stdout } = await exec("npm install --save --save-exact react", {
         shell: "powershell.exe",
       });
       // const { stdout } = await exec("npm install --save dotenv @nestjs/passport passport passport-local @nestjs/jwt passport-jwt", {
