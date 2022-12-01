@@ -35,6 +35,7 @@ async function main() {
   var tmp = globalPath.toString().replace(/(\r\n|\n|\r)/gm, "");
   adePath=join(tmp,'ade-cli');
   toCopyPath=join(adePath,'tocopy');
+  toCopyFront=join(adePath,'tocopyfront');
   console.log(toCopyPath);
   let filePathCopy2=join(process.cwd(), 'tocopy', 'src/database');
   let filePathCopy1=join(adePath,'.sequelizerc');
@@ -47,27 +48,31 @@ async function main() {
       if (projectName) {
         if ((await installNest()) === true) {
           renamePackage(toCopyPath+'/package.json',projectName);
-          //copyEntireDirectory(toCopyPath,projectPath,showError);
-          //fs.copyFileSync(filePathCopy1, projectPath+'/.sequelizerc');
-         // projectPath = await createNestProject(projectName);
-         // if (projectPath !== "") {
-            const status = await installSequelize();
+          const status = await installSequelize();
             if (status) {
-
               if (await installDatabase()) {
                 const database = await getConnectionParams(projectName);
                 const envString=`DB_HOST=${database.host}\nDB_PORT=${database.port}\nDB_USER=${database.username}\nDB_PASS=${database.password}\nDB_DIALECT=${database.dialect}\nDB_NAME_DEVELOPMENT=${database.name}\nDB_NAME_TEST=${database.name}\nDB_NAME_PRODUCTION=${database.name}\nJWTKEY=random_secret_key\nTOKEN_EXPIRATION=48h\nBEARER=Bearer\nAPP_PORT=3000`;
                 fs.writeFileSync(toCopyPath+'/.env',envString,(err)=>{
                   console.log("write file error");
-                });
-                //const dest=projectPath+'/src/database';
-                //copyEntireDirectory(toCopyPath,projectPath,showError);
-                //copyFolderRecursiveSync(toCopyPath,projectPath);
+                });               
                 copyFolderSync(toCopyPath,projectPath);
                 fs.copyFileSync(filePathCopy1, projectPath+'/.sequelizerc');
                 if(await installCriticalPackages())
-                  await createDatabase();
+                  {
+                    await createDatabase();
                   await openVSCodeInCurDir();
+                  const frontPath=projectPath.split('/');
+                  frontPath.pop();
+                  frontPath.pop();
+                  frontPath.push('frontend');
+                  const frontPathString=frontPath.join('/');
+                  copyFolderSync(toCopyFront,frontPathString);
+                  process.chdir(frontPathString);
+                  if(await installCriticalPackages()){
+                    await openVSCodeInCurDir();
+                  }
+                }
 
                 }
             }

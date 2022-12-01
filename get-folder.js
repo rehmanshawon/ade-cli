@@ -1,7 +1,8 @@
+const { join } = require("path");
 var process = require("process");
 const util = require("util");
+const fs = require("fs");
 const exec = util.promisify(require("child_process").exec);
-//const spawn = require("await-spawn");
 
 let psScript = `Function Select-FolderDialog
 {
@@ -36,9 +37,21 @@ async function createProjectFolder() {
     //const data = await spawn("powershell.exe", psScript, { shell: true });
     var path = stdout.toString().replace(/(\r\n|\n|\r)/gm, "");
     console.log(path);
-    if (path !== "") {
-      process.chdir(path);
-      const pathArray = path.split("\\");
+    if (path !== "") {      
+      const folderName =join(path,'backend');
+      const folderNameFront =join(path,'frontend');
+      try {
+        if (!fs.existsSync(folderName)) {
+          fs.mkdirSync(folderName);
+        }
+        if (!fs.existsSync(folderNameFront)) {
+          fs.mkdirSync(folderNameFront);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+      process.chdir(folderName);
+      const pathArray = folderName.split("\\");
       return pathArray[pathArray.length - 1];
     } else {
       return false;
