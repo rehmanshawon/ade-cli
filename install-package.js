@@ -7,9 +7,12 @@ async function installCriticalPackages() {
   throbber.color='blue';
   throbber.spinner='arrow3';   
     try {
-       const { stdout } = await exec("npm install --save --save-exact", {
+      //  const { stdout } = await exec("npm install --save --save-exact", {
+      //   shell: "powershell.exe",
+      // }); 
+      const { stdout } = await exec("npm install --force", {
         shell: "powershell.exe",
-      });      
+      });           
       console.log("Done!", stdout);
       throbber.stop();
       return true;      

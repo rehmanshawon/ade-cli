@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
 const { join } = require('path');
+const path=require('path');
 const { exec } = require("child_process");
 const { promisify } = require("util");
 const installNest = require("./install-nest");
@@ -62,13 +63,10 @@ async function main() {
                   {
                     await createDatabase();
                   await openVSCodeInCurDir();
-                  const frontPath=projectPath.split('/');
-                  frontPath.pop();
-                  frontPath.pop();
-                  frontPath.push('frontend');
-                  const frontPathString=frontPath.join('/');
-                  copyFolderSync(toCopyFront,frontPathString);
-                  process.chdir(frontPathString);
+                  const basePath=projectPath.split('\\').pop();                                  
+                  const frontPath=join(basePath,'frontend');
+                  copyFolderSync(toCopyFront,frontPath);
+                  process.chdir(frontPath);
                   if(await installCriticalPackages()){
                     await openVSCodeInCurDir();
                   }
