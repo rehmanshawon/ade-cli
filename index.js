@@ -24,6 +24,3 @@ program.command("run").description("runs the main cli app").action(main);
 //     .action(markDone)
 
 program.parse();
-// parse commandline
-// module.exports = removeArrayDuplicates
-// now mergin again
